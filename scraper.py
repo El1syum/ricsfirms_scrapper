@@ -3,8 +3,6 @@ import csv
 import requests
 from bs4 import BeautifulSoup
 
-from config import config_params, config_cookies, config_headers
-
 
 class Scrapper:
     TABLE_HEADERS = [
@@ -88,7 +86,7 @@ class Scrapper:
     def main(self):
         json_data = self.get_json()
         page_count = self.get_page_count(json_data)
-        for page in range(1, 2):  # page_count + 1
+        for page in range(1, page_count + 1):
             self.params['page'] = page
             current_json_data = self.get_json()
             companies = self.get_companies(current_json_data)
@@ -98,10 +96,4 @@ class Scrapper:
 
 
 if __name__ == '__main__':
-    scrapper = Scrapper(
-        'https://www.ricsfirms.com/umbraco/api/surveyorSearchApi/results',
-        params=config_params,
-        cookies=config_cookies,
-        headers=config_headers
-    )
-    scrapper.main()
+    ...
