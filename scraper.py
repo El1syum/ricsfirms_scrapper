@@ -10,11 +10,12 @@ class Scrapper:
         'Business type', 'RICS Regulated', 'Residential', 'Commercial'
     ]
 
-    def __init__(self, url: str, params: dict, headers=None, cookies=None, table_name='data.csv'):
+    def __init__(self, url: str, params: dict, headers=None, cookies=None, table_name='data.csv', max_page=None):
         self.url = url
         self.params = params
         self.headers = headers if headers is not None else dict()
         self.cookies = cookies if cookies is not None else dict()
+        self.max_page = max_page
         self.table_name = table_name
         self.data = []
         self.create_csv()
@@ -86,7 +87,8 @@ class Scrapper:
     def main(self):
         json_data = self.get_json()
         page_count = self.get_page_count(json_data)
-        for page in range(1, page_count + 1):
+        self.max_page = self.max_page + 1 if self.max_page else page_count + 1
+        for page in range(1, self.max_page):
             self.params['page'] = page
             current_json_data = self.get_json()
             companies = self.get_companies(current_json_data)
