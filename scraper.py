@@ -10,9 +10,12 @@ class Scrapper:
         'Business type', 'RICS Regulated', 'Residential', 'Commercial'
     ]
 
-    def __init__(self, url: str, params: dict, headers=None, cookies=None, table_name='data.csv', max_page=None):
+    def __init__(self, url: str, params: dict, headers=None, cookies=None, table_name='data.csv', max_page=None,
+                 csv_delimiter=';', encoding='utf-8'):
         self.url = url
         self.params = params
+        self.csv_delimiter = csv_delimiter
+        self.encoding = encoding
         self.headers = headers if headers is not None else dict()
         self.cookies = cookies if cookies is not None else dict()
         self.max_page = max_page
@@ -21,13 +24,13 @@ class Scrapper:
         self.create_csv()
 
     def create_csv(self):
-        with open(self.table_name, 'w', encoding='utf-8') as file:
-            writer = csv.writer(file, delimiter=';')
+        with open(self.table_name, 'w', encoding=self.encoding) as file:
+            writer = csv.writer(file, delimiter=self.csv_delimiter)
             writer.writerow(self.TABLE_HEADERS)
 
     def save_to_csv(self, data):
-        with open(self.table_name, 'a', encoding='utf-8') as file:
-            writer = csv.writer(file, delimiter=';')
+        with open(self.table_name, 'a', encoding=self.encoding) as file:
+            writer = csv.writer(file, delimiter=self.csv_delimiter)
             writer.writerows(data)
 
     def get_json(self):
